@@ -21,8 +21,10 @@
 #define BLE_UUID_DATA "4664E7A1-5A13-BFFF-4636-7D0A4B16496C"
 
 BLEService dataService(BLE_UUID_DATA_SERVICE);
-BLECharacteristic dataWriter(BLE_UUID_DATA, BLERead | BLENotify,
-                             sizeof(uint8_t));
+BLEByteCharacteristic dataWriter(BLE_UUID_DATA,
+                                 BLERead | BLENotify | BLEBroadcast);
+// BLECharacteristic dataWriter(BLE_UUID_DATA, BLERead | BLENotify |
+// BLEBroadcast, sizeof(uint8_t));
 
 void setup() {
     Serial.begin(9600);
@@ -45,7 +47,7 @@ void setup() {
         BLE.setAdvertisedService(dataService);
         dataService.addCharacteristic(dataWriter);
         BLE.addService(dataService);
-        dataWriter.writeValue((uint8_t)0x0, sizeof(uint8_t));
+        dataWriter.writeValue(0);
         BLE.advertise();
         String address = BLE.address();
 
@@ -137,8 +139,9 @@ void loop() {
     if (res != res_prev) {
         BLEDevice central = BLE.central();
         if (central && central.connected()) {
-            Serial.println("Central connected!");
-            dataWriter.writeValue(&res, sizeof(uint8_t));
+            Serial.print("Central connected: ");
+            Serial.println(central.address());
+            dataWriter.writeValue(res);
         }
         Serial.println(res);
         res_prev = res;
