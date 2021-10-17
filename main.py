@@ -26,7 +26,8 @@ def data_handler_cb(handle, value):
 
 def connect_ble():
     
-    adapter = pygatt.GATTToolBackend(search_window_size=2048)
+    adapter = pygatt.GATTToolBackend()
+    # adapter = pygatt.BGAPIBackend()
 
     try:
         # Start the adapter
