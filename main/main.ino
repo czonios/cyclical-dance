@@ -2,15 +2,16 @@
 #include <Arduino_LSM9DS1.h>
 
 #define RESET 0
-#define TOP_LEFT 1
-#define TOP_RIGHT 2
-#define BOTTOM_RIGHT 3
+#define TOP_RIGHT 1
+#define TOP 2
+#define TOP_LEFT 3
 #define BOTTOM_LEFT 4
 #define BOTTOM 5
-#define TOP 6
+#define BOTTOM_RIGHT 6
 
 #define LIMITER 100  // THIS NUMBER NEEDS CALIBRATION
 #define RESET_LIMITER 380
+#define DELAY_SECONDS 2
 
 // RGB LED
 #define RED 22
@@ -55,20 +56,14 @@ void setup() {
         Serial.println(address);
     }
 
-    Serial.print("Magnetic field sample rate = ");
-    Serial.print(IMU.magneticFieldSampleRate());
-    Serial.println(" uT");
-    Serial.println();
-    Serial.println("Magnetic Field in uT");
-    Serial.println("X\tZ\tRES");
-
     // RGB LED
     pinMode(RED, OUTPUT);
     pinMode(BLUE, OUTPUT);
     pinMode(GREEN, OUTPUT);
-    digitalWrite(RED, 0);
-    digitalWrite(GREEN, 0);
-    digitalWrite(BLUE, 0);
+    digitalWrite(RED, 1);
+    digitalWrite(GREEN, 1);
+    digitalWrite(BLUE, 1);
+    dataWriter.writeValue(0);
 }
 
 /*We need z, z axis for this use
@@ -84,9 +79,9 @@ void setup() {
 uint8_t res;
 uint8_t res_prev = 7;
 unsigned long start_time = millis();
-unsigned int red = 0;
-unsigned int green = 0;
-unsigned int blue = 0;
+unsigned int red = 1;
+unsigned int green = 1;
+unsigned int blue = 1;
 
 double normalizeValue(double input) { return (input / 400); }
 
@@ -126,13 +121,8 @@ void loop() {
             } else if (angle < 360) {
                 res = BOTTOM_RIGHT;
             }
-            //            Serial.print(x);
-            //            Serial.print('\t');
-            //            Serial.print(z);
-            //            Serial.print('\t');
-            //            Serial.print(angle);
-            //            Serial.print('\t');
-            //            Serial.println(res);
+        } else {
+            res = res_prev;
         }
     }
 
@@ -146,13 +136,14 @@ void loop() {
         Serial.println(res);
         res_prev = res;
         if (res == 0 || res == 7) {
-            digitalWrite(RED, 0);
-            digitalWrite(GREEN, 0);
-            digitalWrite(BLUE, 0);
+            digitalWrite(RED, 1);
+            digitalWrite(GREEN, 1);
+            digitalWrite(BLUE, 1);
+            delay(DELAY_SECONDS * 1000);
         } else {
-            red = (res % 3 == 1) ? 1 : 0;
-            green = (res % 3 == 2) ? 1 : 0;
-            blue = 1;
+            red = (res == 1 || res == 2 || res == 6) ? 0 : 1;
+            green = (res == 3 || res == 5 || res == 6) ? 0 : 1;  // 1, 3, 5
+            blue = (res == 2 || res == 4 || res == 5) ? 0 : 1;
             digitalWrite(RED, red);
             digitalWrite(GREEN, green);
             digitalWrite(BLUE, blue);

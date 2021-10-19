@@ -1,0 +1,76 @@
+#!/usr/bin/env python3
+
+import time
+import pygatt
+
+LUT = ["RESET", "TOP_RIGHT", "TOP", "TOP_LEFT", "BOTTOM_LEFT", "BOTTOM", "BOTTOM_RIGHT", "INVALID"]
+BLE_UUID_DATA_SERVICE = "2BEEF31A-B10D-271C-C9EA-35D865C1F48A"
+BLE_UUID_DATA =         "4664E7A1-5A13-BFFF-4636-7D0A4B16496C"
+MAC_ADDR =              "c6:d3:74:98:41:c8"
+supercollider = None
+
+def triggerEvent(checkdata):
+   print(str(checkdata))
+
+def data_handler_cb(handle, value):
+    """
+    Handles incoming notifications from BLE characteristic
+
+    Parameters:
+        handle (int): characteristic read handle the data was received on
+        value (bytearray): the data returned in the notification
+    """
+    # print("Handle: {}".format(handle))
+    position = int.from_bytes(value, "big")
+    if LUT[position] == "RESET" or LUT[position] == "INVALID":
+        do_reset()
+    else:
+        send_pos(position)
+
+def connect_ble():
+    adapter = pygatt.GATTToolBackend()
+    # adapter = pygatt.BGAPIBackend()
+
+    # time.sleep(5)
+    # Start the adapter
+    adapter.start()
+    # time.sleep(5)
+    # Connect to the device with that given parameter.
+    device = adapter.connect(MAC_ADDR, timeout=10000)
+    time.sleep(0.1)
+    # Set the security level to medium
+    # device.bond()
+    return device, adapter
+
+def setup_supercollider():
+    return None
+    # raise NotImplementedError
+
+def do_reset():
+    # send reset to SC, and set a wait timer before activating again
+    print("RESET")
+    # raise NotImplementedError
+
+def send_pos(position):
+    print(position)
+    # send position to SC
+    # raise NotImplementedError
+
+
+def main():
+    global supercollider
+    supercollider = setup_supercollider()
+
+    try:
+        # connect to Arduino
+        device, adapter = connect_ble()
+        # subscribe to data characteristic
+        device.subscribe(BLE_UUID_DATA,
+                     callback=data_handler_cb)
+        input("Press enter to stop program...\n")
+    finally:
+        # Stop the adapter session
+        adapter.stop()
+
+if __name__ == "__main__":
+    main()
