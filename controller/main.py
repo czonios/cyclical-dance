@@ -2,6 +2,7 @@
 
 import time
 import pygatt
+from supercollider import *
 
 LUT = ["RESET", "TOP_RIGHT", "TOP", "TOP_LEFT", "BOTTOM_LEFT", "BOTTOM", "BOTTOM_RIGHT", "INVALID"]
 BLE_UUID_DATA_SERVICE = "2BEEF31A-B10D-271C-C9EA-35D865C1F48A"
@@ -29,37 +30,25 @@ def data_handler_cb(handle, value):
 
 def connect_ble():
     adapter = pygatt.GATTToolBackend()
-    # adapter = pygatt.BGAPIBackend()
+    # adapter = pygatt.BGAPIBackend() # might need for Windows
 
-    # time.sleep(5)
     # Start the adapter
     adapter.start()
-    # time.sleep(5)
+    
     # Connect to the device with that given parameter.
     device = adapter.connect(MAC_ADDR, timeout=10000)
     time.sleep(0.1)
-    # Set the security level to medium
-    # device.bond()
     return device, adapter
-
-def setup_supercollider():
-    return None
-    # raise NotImplementedError
 
 def do_reset():
     # send reset to SC, and set a wait timer before activating again
     print("RESET")
     # raise NotImplementedError
 
-def send_pos(position):
-    print(position)
-    # send position to SC
-    # raise NotImplementedError
-
 
 def main():
     global supercollider
-    supercollider = setup_supercollider()
+    supercollider = init_supercollider()
 
     try:
         # connect to Arduino
