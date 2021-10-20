@@ -28,6 +28,8 @@ SynthDef("echo", { arg delay = 0.2, decay = 4;
 (
 x = OSCFunc( { | msg, time, addr, port |
 
+	h = Synth( \sine );
+	NodeWatcher.register(h);
     var position = msg[1].asInteger;
     ( "position is " + position ).postln;
 	switch(position,
@@ -62,7 +64,7 @@ x = OSCFunc( { | msg, time, addr, port |
 
 (
 z = OSCFunc( { | msg, time, addr, port |
-	m.freeAll;
+	h.free;
 }, "/reset" );
 )
 

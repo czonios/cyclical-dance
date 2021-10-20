@@ -2,6 +2,7 @@
 
 import time
 import pygatt
+import os
 from supercollider import *
 
 LUT = ["RESET", "TOP_RIGHT", "TOP", "TOP_LEFT", "BOTTOM_LEFT", "BOTTOM", "BOTTOM_RIGHT", "INVALID"]
@@ -28,14 +29,13 @@ def data_handler_cb(handle, value):
         supercollider.send_pos(position)
 
 def connect_ble():
-    # adapter = pygatt.GATTToolBackend()
-    adapter = pygatt.BGAPIBackend() # might need for Windows
+    adapter = pygatt.GATTToolBackend()
 
     # Start the adapter
-    adapter.start()
+    adapter.start(reset=False)
     
     # Connect to the device with that given parameter.
-    device = adapter.connect(MAC_ADDR, timeout=10000)
+    device = adapter.connect(MAC_ADDR, timeout=1000)
     time.sleep(0.1)
     return device, adapter
 
@@ -55,12 +55,32 @@ def main():
 
     try:
         # connect to Arduino
-        device, adapter = connect_ble()
-        # subscribe to data characteristic
-        device.subscribe(BLE_UUID_DATA,
-                     callback=data_handler_cb)
-        input("Press enter to stop program...\n")
-        adapter.stop()
+        if os.name == 'nt':
+            print("Windows...")
+            import asyncio
+            from bleak import BleakClient
+
+
+            async def test():
+                async with BleakClient(MAC_ADDR) as client:
+                    await asyncio.sleep(0.1)
+                    print(f"Connected: {client.is_connected}")
+                    while 1:
+                        # d = await client.read_gatt_char(BLE_UUID_DATA)
+                        # print('d:', d)
+                        # data_handler_cb(None, d)
+                        await client.start_notify(BLE_UUID_DATA, data_handler_cb)
+                    input("Press enter to stop program...\n")
+                    await client.stop_notify(BLE_UUID_DATA)
+
+            asyncio.run(test())
+        else:
+            device, adapter = connect_ble()
+            # subscribe to data characteristic
+            device.subscribe(BLE_UUID_DATA,
+                        callback=data_handler_cb)
+            input("Press enter to stop program...\n")
+            adapter.stop()
     finally:
         pass
         
