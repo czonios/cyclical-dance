@@ -11,8 +11,4 @@
 ### Python libraries
 
 - pygatt
-
-one of:
-
-- pyosc3
 - python-osc

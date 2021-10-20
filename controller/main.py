@@ -21,12 +21,11 @@ def data_handler_cb(handle, value):
         handle (int): characteristic read handle the data was received on
         value (bytearray): the data returned in the notification
     """
-    # print("Handle: {}".format(handle))
     position = int.from_bytes(value, "big")
     if LUT[position] == "RESET" or LUT[position] == "INVALID":
         do_reset()
     else:
-        send_pos(position)
+        supercollider.send_pos(position)
 
 def connect_ble():
     adapter = pygatt.GATTToolBackend()
@@ -41,14 +40,18 @@ def connect_ble():
     return device, adapter
 
 def do_reset():
-    # send reset to SC, and set a wait timer before activating again
+    # send reset to SC
     print("RESET")
-    # raise NotImplementedError
+    supercollider.reset()
 
 
 def main():
-    global supercollider
-    supercollider = init_supercollider()
+    try:
+        global supercollider
+        supercollider = SuperCollider()
+    except:
+        print("Could not connect to supercollider server.")
+        exit(1)
 
     try:
         # connect to Arduino

@@ -1,34 +1,35 @@
-import pyOSC3
-# import pythonosc
+# import pyOSC3
+from pythonosc import udp_client
 
-def init_supercollider():
-    client = pyOSC3.OSCClient()
-    client.connect('127.0.0.1', 57110)
-    # client = pythonosc.udp_client.SimpleUDPClient('127.0.0.1', 57110)
-    return client
+class SuperCollider():
+    def __init__(self):
+        # super.__init__()
+        self.client = udp_client.SimpleUDPClient('127.0.0.1', 57120)
+        # self.client = pyOSC3.OSCClient()
+        # self.client.connect(('127.0.0.1', 57110))
 
-def send_pos(position, sc):
-    print(position)
-    msg = pyOSC3.OSCMessage()
-    msg.setAddress(f"/{position}")
-    msg.append(500)
-    sc.send(msg)
-    # sc.send_message(f"/{position}", 0)
+    def send_pos(self, position):
+        print(position)
+        # msg = pyOSC3.OSCMessage()
+        # msg.setAddress("/handle")
+        # msg.append(position)
+        # self.client.send(msg)
+        self.client.send_message("/handle", position)
 
-def reset_sc(sc):
-    send_pos("reset", sc)
+    def reset(self):
+        # msg = pyOSC3.OSCMessage()
+        # msg.setAddress(f"/reset")
+        # msg.append(0)
+        # self.client.send(msg)
+        self.client.send_message("/reset", 0)
+
 
 if __name__ == "__main__":
-    sc = init_supercollider()
+    sc = SuperCollider()
     import time
-    send_pos(1, sc)
-    time.sleep(0.5)
-    send_pos(2, sc)
-    time.sleep(0.5)
-    send_pos(3, sc)
-    time.sleep(0.5)
-    send_pos(4, sc)
-    time.sleep(0.5)
-    send_pos(5, sc)
-    time.sleep(0.5)
-    reset_sc(sc)
+    sc.send_pos(1)
+    time.sleep(5)
+    sc.send_pos(2)
+    time.sleep(5)
+    sc.reset()
+
