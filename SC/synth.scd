@@ -32,15 +32,27 @@ x = OSCFunc( { | msg, time, addr, port |
     ( "position is " + position ).postln;
 	switch(position,
 		1, {
-			h = Synth( \sine, \freq 329.63 );
+			h.set( \freq, 220.00 );
 			NodeWatcher.register(h);
 		},
 		2, {
-			h = Synth( \sine, \freq 392.00 );
+			h.set( \freq, 261.63 );
 			NodeWatcher.register(h);
 		},
 		3, {
-			h = Synth( \sine, \freq 493.88 );
+			h.set( \freq, 293.66 );
+			NodeWatcher.register(h);
+		},
+		4, {
+			h.set( \freq, 329.63 );
+			NodeWatcher.register(h);
+		},
+		5, {
+			h.set( \freq, 392.00 );
+			NodeWatcher.register(h);
+		},
+		6, {
+			h.set( \freq, 440.00 );
 			NodeWatcher.register(h);
 		}
 	);

@@ -28,8 +28,8 @@ def data_handler_cb(handle, value):
         supercollider.send_pos(position)
 
 def connect_ble():
-    adapter = pygatt.GATTToolBackend()
-    # adapter = pygatt.BGAPIBackend() # might need for Windows
+    # adapter = pygatt.GATTToolBackend()
+    adapter = pygatt.BGAPIBackend() # might need for Windows
 
     # Start the adapter
     adapter.start()
@@ -60,9 +60,10 @@ def main():
         device.subscribe(BLE_UUID_DATA,
                      callback=data_handler_cb)
         input("Press enter to stop program...\n")
-    finally:
-        # Stop the adapter session
         adapter.stop()
+    finally:
+        pass
+        
 
 if __name__ == "__main__":
     main()
