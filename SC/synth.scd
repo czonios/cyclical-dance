@@ -5,7 +5,7 @@ m.boot; //start the server
 ("***   The address of the server is: " + NetAddr.langPort + "   ***").postln;
 
 (
-SynthDef("sine", { arg freq=440;
+SynthDef("sine", { arg freq=261.63;
     var osc;
     osc = SinOsc.ar(freq, 0, 0.1); // 800 Hz sine oscillator
     Out.ar(0, osc); // send output to audio bus zero.
@@ -32,15 +32,17 @@ x = OSCFunc( { | msg, time, addr, port |
     ( "position is " + position ).postln;
 	switch(position,
 		1, {
-			echo_var = Synth(\echo);
-			NodeWatcher.register(echo_var);
-		}/*,
+			h = Synth( \sine, \freq 329.63 );
+			NodeWatcher.register(h);
+		},
 		2, {
-			if (echo_var.isRunning,
-				{ echo_var.free },
-				{}
-			);
-		}*/
+			h = Synth( \sine, \freq 392.00 );
+			NodeWatcher.register(h);
+		},
+		3, {
+			h = Synth( \sine, \freq 493.88 );
+			NodeWatcher.register(h);
+		}
 	);
 
 }, "/handle" );

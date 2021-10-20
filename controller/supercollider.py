@@ -28,8 +28,10 @@ if __name__ == "__main__":
     sc = SuperCollider()
     import time
     sc.send_pos(1)
-    time.sleep(5)
+    time.sleep(1)
     sc.send_pos(2)
-    time.sleep(5)
+    time.sleep(1)
+    sc.send_pos(3)
+    time.sleep(3)
     sc.reset()
 
