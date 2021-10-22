@@ -1,5 +1,11 @@
 # cyclical-dance
 
+## Usage
+
+```py
+python main.py
+```
+
 ## Prerequisites
 
 ### Hardware
