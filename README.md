@@ -2,6 +2,11 @@
 
 ## Usage
 
+- Connect your Arduino Nano 33 BLE Sense
+- Open serial monitor on Arduino IDE
+- Note the mac address of the Arduino
+- Enter it in the `main.py` file
+
 ```py
 python main.py
 ```
