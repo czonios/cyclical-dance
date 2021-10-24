@@ -10,25 +10,6 @@
 
 Once everything is set up (see [Setting up](#setting-up)), move the Arduino to any of the six positions around the magnet to enable the corresponding effect. Positioning the Arduino very close to the magnet will reset the effects (and the LED will turn off) - you will have two seconds to move your foot either to a new effect area or far away from the magnet.
 
-## Setting up
-- Connect your Arduino Nano 33 BLE Sense
-- Open serial monitor on Arduino IDE
-- Note the mac address of the Arduino
-- Set it in the variable `MAC_ADDR` located in the `controller/main.py` file
-- Open Supercollider. Check the console output for the port number, set it in the `__init__` function in the file `controller/supercollider.py`
-- Run the python script:
-
-```py
-cd controller
-python main.py
-```
-
-### Connecting the Python script to the Arduino
-
-- Move your Arduino close to the magnet, and move it around the magnet but not too close. The on-board LEDs should be changing colors. 
-- The Python script will output a connection message once it connects to the Arduino.
-- You are now ready to dance
-
 ## Prerequisites
 
 ### Hardware
@@ -62,3 +43,22 @@ or
 ```py
 pip install pygatt bleak python-osc
 ```
+
+## Setting up
+- Connect your Arduino Nano 33 BLE Sense to a computer with the Arduino IDE installed
+- Open the serial monitor on Arduino IDE
+- Note the mac address of the Arduino (it will be printed in the serial monitor)
+- Set it in the variable `MAC_ADDR` located in the `controller/main.py` file
+- Open Supercollider. Check the console output for the port number, set it in the `__init__` function in the file `controller/supercollider.py`
+- Run the python script:
+
+```py
+cd controller
+python main.py
+```
+
+### Connecting the Python script to the Arduino
+
+- Move your Arduino close to the magnet, and move it around the magnet but not too close. The on-board LEDs should be changing colors. 
+- The Python script will output a connection message once it connects to the Arduino.
+- You are now ready to dance
