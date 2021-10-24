@@ -66,16 +66,6 @@ void setup() {
     dataWriter.writeValue(0);
 }
 
-/*We need z, z axis for this use
- *Positive z is forward, positive x in left,
- *keeping the board horizonticaly, barcode facing upwards and forward
- *Gonna use 2d plane for these purpose
- *value range [-400, 400]
- *THIS CODE HAS BEEN WRITTEN FOR 6 MAGNETS OPERATION, ONE FOR EACH STEP-EFFECT
- *e.g. FOR EFFECT ONE YOUR FOOT MAKES CONTACT(OR CLOSE ENOUGH) TO THE MAGNET
- *ALMOST 45DEG from you foot Distance depends on the magnets' power
- */
-
 uint8_t res;
 uint8_t res_prev = 7;
 unsigned long start_time = millis();
@@ -96,18 +86,18 @@ void loop() {
     float x, y, z;
 
     if (IMU.magneticFieldAvailable()) {
-        IMU.readMagneticField(x, z, y);
+        IMU.readMagneticField(x, y, z);
 
         if (abs(x) > RESET_LIMITER && abs(y) > RESET_LIMITER &&
             abs(z) > RESET_LIMITER) {
             res = RESET;  // if you step on a magnet you reset the effects
-            Serial.println("RESET");
-        } else if (abs(x) > LIMITER || abs(z) > LIMITER) {
-            double normX, normZ;
+            // Serial.println("RESET");
+        } else if (abs(x) > LIMITER || abs(y) > LIMITER) {
+            double normX, normY;
             int angle;
             normX = normalizeValue(x);
-            normZ = normalizeValue(z);
-            angle = computeAngle(normX, normZ);
+            normY = normalizeValue(y);
+            angle = computeAngle(normX, normY);
             if (angle < 45) {
                 res = TOP_RIGHT;
             } else if (angle < 135) {
@@ -129,8 +119,8 @@ void loop() {
     if (res != res_prev) {
         BLEDevice central = BLE.central();
         if (central && central.connected()) {
-            Serial.print("Central connected: ");
-            Serial.println(central.address());
+            // Serial.print("Central connected: ");
+            // Serial.println(central.address());
             dataWriter.writeValue(res);
         }
         Serial.println(res);
