@@ -6,7 +6,7 @@
 ### General Use
 
 ![](graph.png)
-> Positions around the magnet that can be used to enable different effects and sounds through supercollider
+> Positions around the magnet that can be used to enable different effects and sounds through supercollider. The colors correspond to the color of the on-board LED in that position.
 
 Once everything is set up (see [Setting up](#setting-up)), move the Arduino to any of the six positions around the magnet to enable the corresponding effect. Positioning the Arduino very close to the magnet will reset the effects (and the LED will turn off) - you will have two seconds to move your foot either to a new effect area or far away from the magnet.
 
@@ -28,6 +28,7 @@ python main.py
 - Move your Arduino close to the magnet, and move it around the magnet but not too close. The on-board LEDs should be changing colors. 
 - The Python script will output a connection message once it connects to the Arduino.
 - You are now ready to dance
+
 ## Prerequisites
 
 ### Hardware
