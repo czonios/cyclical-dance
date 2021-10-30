@@ -9,7 +9,7 @@
 #define BOTTOM 5
 #define BOTTOM_RIGHT 6
 
-#define LIMITER 100  // THIS NUMBER NEEDS CALIBRATION
+#define LIMITER 40  // THIS NUMBER NEEDS CALIBRATION
 #define RESET_LIMITER 380
 #define DELAY_SECONDS 2
 
@@ -29,8 +29,8 @@ BLEByteCharacteristic dataWriter(BLE_UUID_DATA,
 
 void setup() {
     Serial.begin(9600);
-    while (!Serial)
-        ;
+    // while (!Serial)
+    // ;
     Serial.println("Started");
 
     if (!IMU.begin()) {
