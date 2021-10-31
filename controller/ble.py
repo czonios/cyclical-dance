@@ -7,7 +7,7 @@ def connect_ble_linux(MAC_ADDR):
     adapter = pygatt.GATTToolBackend()
 
     # Start the adapter
-    adapter.start(reset=False)
+    adapter.start()
     
     # Connect to the device with that given parameter.
     device = adapter.connect(MAC_ADDR, timeout=1000)
@@ -15,7 +15,7 @@ def connect_ble_linux(MAC_ADDR):
     return device, adapter
 
 def subscribe_ble_linux(MAC_ADDR, BLE_UUID_DATA, data_handler_cb):
-    device, adapter = connect_ble_linux()
+    device, adapter = connect_ble_linux(MAC_ADDR)
     # subscribe to data characteristic
     device.subscribe(BLE_UUID_DATA,
                 callback=data_handler_cb)
@@ -24,25 +24,28 @@ def subscribe_ble_linux(MAC_ADDR, BLE_UUID_DATA, data_handler_cb):
 
 async def connect_ble_windows(MAC_ADDR, BLE_UUID_DATA, data_handler_cb):
     client = BleakClient(MAC_ADDR)
-    try:
-        print("Awaiting connection...")
-        await client.connect(timeout=1000)
-        asyncio.sleep(0.1)
-        print("Connected to BLE")
-        await client.start_notify(BLE_UUID_DATA, data_handler_cb)
-        while 1:
-            if not client.is_connected:
-                break
-            # d = await client.read_gatt_char(BLE_UUID_DATA, use_cached=False)
-            # data_handler_cb(None, d)
-            await asyncio.sleep(5.0)#, loop=asyncio.get_event_loop())
-        print("Connection to BLE broken")
-        await client.stop_notify(BLE_UUID_DATA)
-        await client.disconnect()
-    except Exception as e:
-        print("An error occured in BLE connection:", e)
-    finally:
-        await client.disconnect()
+    while True:
+        try:
+            print("Awaiting connection...")
+            await client.connect(timeout=1000)
+            await asyncio.sleep(0.1)
+            print("Connected to BLE")
+            await client.start_notify(BLE_UUID_DATA, data_handler_cb)
+            while 1:
+                if not client.is_connected:
+                    break
+                # d = await client.read_gatt_char(BLE_UUID_DATA, use_cached=False)
+                # data_handler_cb(None, d)
+                await asyncio.sleep(5.0)#, loop=asyncio.get_event_loop())
+            print("Connection to BLE broken")
+            await client.stop_notify(BLE_UUID_DATA)
+            await client.disconnect()
+            input("Press enter to stop program...\n")
+        except Exception as e:
+            print("An error occured in BLE connection:", e)
+            raise e
+        finally:
+            await client.disconnect()
 
 
 
