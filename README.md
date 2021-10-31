@@ -35,13 +35,13 @@ Install the following libraries on Arduino IDE
 You also need these Python libraries:
 
 ```py
-pip3 install pygatt bleak python-osc
+pip3 install pygatt bleak python-osc pyaudio
 ```
 
 or
 
 ```py
-pip install pygatt bleak python-osc
+pip install pygatt bleak python-osc pyaudio
 ```
 
 ## Setting up
