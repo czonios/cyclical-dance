@@ -35,7 +35,7 @@ async def connect_ble_windows(MAC_ADDR, BLE_UUID_DATA, data_handler_cb):
                 break
             # d = await client.read_gatt_char(BLE_UUID_DATA, use_cached=False)
             # data_handler_cb(None, d)
-            await asyncio.sleep(5.0, loop=asyncio.get_event_loop())
+            await asyncio.sleep(5.0)#, loop=asyncio.get_event_loop())
         print("Connection to BLE broken")
         await client.stop_notify(BLE_UUID_DATA)
         await client.disconnect()
