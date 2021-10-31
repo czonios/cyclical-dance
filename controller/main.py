@@ -14,6 +14,7 @@ curr_sample = None
 
 
 def sample_handler(pos):
+    print('position:', pos)
     global curr_sample
     if curr_sample is not None:
         curr_sample.stop()
@@ -42,8 +43,9 @@ def do_reset():
     print("RESET")
     # supercollider.reset()
     global curr_sample
-    curr_sample.stop()
-    curr_sample = None
+    if curr_sample is not None:
+        curr_sample.stop()
+        curr_sample = None
 
 def main():
     # global supercollider
@@ -55,8 +57,7 @@ def main():
     else:
         # subscribe_ble_windows(MAC_ADDR, BLE_UUID_DATA, data_handler_cb)
         subscribe_ble_linux(MAC_ADDR, BLE_UUID_DATA, data_handler_cb)
-    
-        
+    input("Press enter to stop program...\n")
 
 if __name__ == "__main__":
     main()
