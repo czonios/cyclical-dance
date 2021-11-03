@@ -23,8 +23,8 @@ def subscribe_ble_linux(MAC_ADDR, BLE_UUID_DATA, data_handler_cb):
     adapter.stop()
 
 async def connect_ble_windows(MAC_ADDR, BLE_UUID_DATA, data_handler_cb):
-    client = BleakClient(MAC_ADDR)
     while True:
+        client = BleakClient(MAC_ADDR)
         try:
             print("Awaiting connection...")
             await client.connect(timeout=1000)

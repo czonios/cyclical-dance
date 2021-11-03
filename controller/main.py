@@ -14,7 +14,7 @@ curr_sample = None
 
 
 def sample_handler(pos):
-    print('position:', pos)
+    print('position:', pos, '->', LUT[pos])
     global curr_sample
     if curr_sample is not None:
         curr_sample.stop()
@@ -50,6 +50,18 @@ def do_reset():
 def main():
     # global supercollider
     # supercollider = SuperCollider()
+    # import time
+    # while True:
+    #     sample_handler(1)
+    #     time.sleep(5)
+    #     sample_handler(4)
+    #     time.sleep(5)
+    #     do_reset()
+    #     time.sleep(2)
+    #     do_reset()
+    #     time.sleep(5)
+    #     sample_handler(2)
+    #     time.sleep(5)
 
     # connect to Arduino
     if os.name == 'nt':
@@ -57,7 +69,7 @@ def main():
     else:
         # subscribe_ble_windows(MAC_ADDR, BLE_UUID_DATA, data_handler_cb)
         subscribe_ble_linux(MAC_ADDR, BLE_UUID_DATA, data_handler_cb)
-    input("Press enter to stop program...\n")
+    # input("Press enter to stop program...\n")
 
 if __name__ == "__main__":
     main()

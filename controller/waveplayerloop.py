@@ -1,4 +1,5 @@
 import os
+os.environ["PA_ENABLE_DEBUG_OUTPUT"] = '0'
 from time import sleep
 import wave
 import threading
